@@ -1,0 +1,34 @@
+{% extends 'MyInventoryApp/base.html' %} <!--extends base.html-->
+{% load static %}
+
+<!-- Page Title -->
+{% block title %}
+    View Bottles
+{% endblock %}
+
+<!-- TABLE --> 
+<!--I think I should be using the getter and setter but using it directly as temp-->
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="form-header border col-md-12">
+            <h5><b>Payslip details</b></h5> 
+        </div>
+    </div>
+</div>
+<h>{{empobj.name}}</h>
+<h>{{empobj.id_number}}</h>
+<h>{{payslipobj.month}} , {{payslipobj.year}}</h>
+<h>{{payslipobj.pay_cycle}}</h>
+<p></p>
+<h>Base Pay: {{empobj.rate}}</h>
+<h>Allowances: {{payslipobj.earnings_allowance}}</h>
+<h>Overtime: {{payslipobj.overtime}}</h>
+<h>{{grosspay}}</h>
+<p></p>
+<h>Philhealth: {{payslipobj.deductions_health}}</h>
+<h>Pag_Ibig: {{payslipobj.pag_ibig}}</h>
+<h>SSS: {{payslipobj.sss}}</h>
+<h>Total pay: {{payslipobj.total_pay}}</h>
+{% endblock %}

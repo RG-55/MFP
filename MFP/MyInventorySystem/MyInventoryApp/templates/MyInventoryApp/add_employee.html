@@ -1,0 +1,58 @@
+{% extends 'MyInventoryApp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+
+<div class="col-md-8">
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title">Type in Employee details</h5>
+        </div>
+        <div class="card-body">
+            <form method="POST">{% csrf_token %}
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="name">Name:</label> <br>
+                            <input type="text" class="form-control w-50" id="name" name="name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_number">ID Number:</label><br>
+                            <input type="text" class="form-control w-50" id="id_number" name="id_number"><br>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="rate">Rate:</label><br>
+                            <input type="number" class="form-control w-50" id="cost" name="rate" step="0.01" min="0"><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="allowance">Allowance (Optional):</label><br>
+                            <input type="text" class="form-control w-50" id="allowance" name="allowance"><br>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-primary">Add Employee</button>
+                        <a href="{% url 'employees' %}"  class="btn btn-secondary">Back</a>
+
+                    </div>
+                </div>
+            </form>  
+            
+            {% for message in messages %}
+            <div class="alert alert-warning" role="alert">                        
+             {{ message }}
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+<!--Emergency manual padding, don't mind unless theres a better way-->
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+{% endblock %}

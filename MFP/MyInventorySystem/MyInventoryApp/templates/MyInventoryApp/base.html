@@ -1,0 +1,36 @@
+{% load static %}
+
+<html>
+    <head>
+        <title>Final</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+        <link rel="stylesheet" href="{% static '/bootstrap/css/bootstrap.min.css' %}">
+        <link rel="stylesheet" href="{% static '/bootstrap/css/custom.css' %}">
+
+        <script src="{% static '/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-dark bg-custom mb-3 sticky-top" style="background-color: #592304;">
+            <div class="container-fluid">
+                <a class="navbar-brand mb-0">Lazapee</span> </a>
+                <a class="navbar-brand mb-1" href="{% url 'employees' %}">Employees</span> </a>
+                <a class="navbar-brand mb-1" href="{% url 'payslips' %}">Payslips</span> </a>
+            </div>
+        </nav>
+
+        <div class="container ">
+            <div class="row">
+
+                {% block content %}
+                {% endblock %}
+
+            </div>
+        </div>  
+    </body>
+
+    <nav class="navbar bg-custom fixed-bottom justify-content-center" style="background: #592304;">
+        <div style="color: white;">&copy; 202020202020</div>
+    </nav>  
+    </div>
+</html>
