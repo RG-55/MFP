@@ -97,54 +97,57 @@ def payslips(request):
             messages.warning(request, 'Error: Missing Input')
             return redirect('payslips')
         
+        
         # Checks if the input is a name or id
         if Employee.objects.filter(name=dname_or_id) == 0:
             empobj = get_object_or_404(Employee, id_name=dname_or_id)
         else:
             empobj = get_object_or_404(Employee, name=dname_or_id)
 
-        print(type(dpay_cycle))
-        print(dpay_cycle)
-        #Pagibig
-        if dpay_cycle == "1":
-            dtax = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - 100)*0.2
-            dtotal_pay = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - 100) - dtax
-            Payslip.objects.create(id_number=empobj,
-                                   month=dmonth,
-                                   year=dyear,
-                                   pay_cycle=int(dpay_cycle),
-                                   rate=empobj.getRate(),
-                                   earnings_allowance=empobj.getAllowance(), 
-                                   deductions_tax=dtax, 
-                                   pag_ibig= 100,
-                                   deductions_health = 0,
-                                   sss=0, 
-                                   overtime=empobj.getOvertime(), 
-                                   total_pay=dtotal_pay, date_range=0)
-        #Philhealth and SSS
+        if payslip_objects.filter(id_number=empobj,month=dmonth,year=dyear) == 0:
+            #Pagibig
+            if dpay_cycle == "1":
+                dtax = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - 100)*0.2
+                dtotal_pay = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - 100) - dtax
+                Payslip.objects.create(id_number=empobj,
+                                       month=dmonth,
+                                       year=dyear,
+                                       pay_cycle=int(dpay_cycle),
+                                       rate=empobj.getRate(),
+                                       earnings_allowance=empobj.getAllowance(), 
+                                       deductions_tax=dtax, 
+                                       pag_ibig= 100,
+                                       deductions_health = 0,
+                                       sss=0, 
+                                       overtime=empobj.getOvertime(), 
+                                       total_pay=dtotal_pay, date_range=0)
+            #Philhealth and SSS
+            else: 
+                ddeductions_health = (empobj.getRate()*0.04) 
+                dsss = (empobj.getRate()*0.045)
+                dtax = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - ddeductions_health - dsss)*0.2
+                dtotal_pay = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - ddeductions_health - dsss) - dtax
+                Payslip.objects.create(id_number=empobj,
+                                       month=dmonth,
+                                       year=dyear,
+                                       pay_cycle=dpay_cycle,
+                                       rate=empobj.getRate(),
+                                       earnings_allowance=empobj.getAllowance(), 
+                                       deductions_tax=dtax, 
+                                       deductions_health = ddeductions_health,
+                                       sss=dsss, 
+                                       overtime=empobj.getOvertime(), 
+                                       total_pay=dtotal_pay,
+                                       pag_ibig=0, date_range=0)
+            messages.success(request, 'Payslip created successfully')
+            empobj.resetOvertime()
+            empobj.save()
+            return redirect('payslips')
+
         else: 
-            ddeductions_health = (empobj.getRate()*0.04) 
-            dsss = (empobj.getRate()*0.045)
-            dtax = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - ddeductions_health - dsss)*0.2
-            dtotal_pay = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - ddeductions_health - dsss) - dtax
-            Payslip.objects.create(id_number=empobj,
-                                   month=dmonth,
-                                   year=dyear,
-                                   pay_cycle=dpay_cycle,
-                                   rate=empobj.getRate(),
-                                   earnings_allowance=empobj.getAllowance(), 
-                                   deductions_tax=dtax, 
-                                   deductions_health = ddeductions_health,
-                                   sss=dsss, 
-                                   overtime=empobj.getOvertime(), 
-                                   total_pay=dtotal_pay,
-                                   pag_ibig=0, date_range=0)
-
-        messages.success(request, 'Payslip created successfully')
-        empobj.resetOvertime()
-        empobj.save()
-        return redirect('payslips')
-
+            messages.warning(request, 'ID already has a payslip for specified time period')
+            return redirect('payslips')
+        
     else:
         return render(request,'MyInventoryApp/payslips.html', {'Employees':employee_objects,'Payslips':payslip_objects})
 
