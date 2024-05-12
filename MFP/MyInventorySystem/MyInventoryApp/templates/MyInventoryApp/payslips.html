@@ -2,8 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="col-12">
-
+<div class="col-10" style="margin:auto;">
     <div class="card">
         <div class="card-header">
             <h5 class="card-title">Type in Employee details</h5>
@@ -11,9 +10,11 @@
         <div class="card-body">
             <form method="POST">{% csrf_token %}
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-3" style="margin:auto;">
                         <div class="form-group">
+                            <label for="name_or_id">Payslip For:</label>
                             <select id="name_or_id" name="name_or_id" class="form-select">
+                                <option value="" disabled selected>Choose employee</option>
                                 <optgroup label="Employee Names">
                                     {% for s in Employees %}
                                     <option>{{s.name}}</option>
@@ -24,10 +25,15 @@
                                     <option>{{s.id_number}}</option>
                                     {% endfor %}
                                 </optgroup>
-                            </select><br>
+                            </select>
                         </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-2" style="margin:auto;">
                         <div class="form-group">
-                            <label for="month">Month:</label> <br>
+                            <label for="month">Month:</label>
                             <select id="month" name="month" class="form-select">
                                 <option value="January">January</option>
                                 <option value="February">February</option>
@@ -43,12 +49,14 @@
                                 <option value="December">December</option>
                             </select>
                         </div>
-
+                    </div>
+                    <div class="col-2" style="margin:auto;">
                         <div class="form-group">
                             <label for="year">Year:</label><br>
-                            <input type="number" class="form-control w-50" id="year" name="year" step="1" min="0"><br>
+                            <input type="number" class="form-control" id="year" name="year" step="1" min="0" max="2024">
                         </div>
-
+                    </div>
+                    <div class="col-2" style="margin:auto;">
                         <div class="form-group">
                             <label for="cycle">Cycle:</label><br>
                             <select id="cycle" name="cycle" class="form-select">
@@ -57,19 +65,23 @@
                             </select>
                         </div>
                     </div>
-                    <div>
-                        <button type="submit" class="btn btn-primary">Add Payslip</button>
+                    <div class="col-2" style="margin:auto;">
+                        <br><button type="submit" class="btn btn-primary text-end">Add Payslip</button>
                     </div>
+                    
                 </div>
             </form>  
         </div>
     
 
     <table class="table table-striped mb-5">
-        <thead>
+        <thead class="table-dark">
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col"></th>
+                <th scope="col">ID Number</th>
+                <th scope="col">Date</th>
+                <th scope="col">Cycle</th>
+                <th scope="col">Total Pay</th>
+                <th scope="col">Options</th>
             </tr>
         </thead>
         <tbody>
@@ -80,7 +92,7 @@
                 <td>{{ d.pay_cycle }}</td>
                 <td>{{ d.total_pay }}</td>
                 <td>
-                    <a href="{% url 'view_payslip' pk=d.pk %}" class="btn btn-dark">Update</a>
+                    <a href="{% url 'view_payslip' pk=d.pk %}" class="btn btn-dark">View</a>
                 </td>
             </tr>
             {% endfor %}

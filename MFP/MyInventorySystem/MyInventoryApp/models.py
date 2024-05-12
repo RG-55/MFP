@@ -8,7 +8,7 @@ class Employee(models.Model):
     id_number = models.CharField(max_length=300)
     rate = models.FloatField()
     overtime_pay = models.FloatField(default=0, blank=True, null=True)
-    allowance = models.FloatField()
+    allowance = models.FloatField(default=0, blank=True, null=True)
 
     def __str__(self):
         return "rate: " + str(self.id_number)+", rate: "+ str(self.rate)

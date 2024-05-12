@@ -10,10 +10,14 @@ def employees(request):
 
 def add_employee(request):
     if request.method == "POST":
-        dname = request.POST.get('name').strip()
-        did_number = request.POST.get('id_number').strip() 
-        drate = request.POST.get('rate').strip()
-        dallowance = request.POST.get('allowance').strip()
+        try:
+            dname = request.POST.get('name').strip()
+            did_number = request.POST.get('id_number').strip() 
+            drate = request.POST.get('rate').strip()
+            dallowance = request.POST.get('allowance').strip()
+        except AttributeError:
+            messages.warning(request, 'Error: Missing Input')
+            return redirect('add_employee')
 
         
         # If all have a value (False) [meaning one value is 0] reverse to (True) to slam it into the redirect
@@ -35,11 +39,14 @@ def add_employee(request):
 def update_employee(request, pk):
     empobj = get_object_or_404(Employee,pk=pk)
     if request.method == "POST":
-        dname = request.POST.get('name').strip()
-        did_number = request.POST.get('id_number').strip() 
-        drate = request.POST.get('rate').strip()
-        dallowance = request.POST.get('allowance').strip()
-
+        try:
+            dname = request.POST.get('name').strip()
+            did_number = request.POST.get('id_number').strip() 
+            drate = request.POST.get('rate').strip()
+            dallowance = request.POST.get('allowance').strip()
+        except AttributeError:
+            messages.warning(request, 'Error: Missing Input')
+            return redirect('add_employee')
         
         # If all have a value (False) [meaning one value is 0] reverse to (True) to slam it into the redirect
         if not all((dname,did_number,drate)):
@@ -86,25 +93,28 @@ def payslips(request):
     payslip_objects = Payslip.objects.all()
 
     if request.method == "POST":
-        dname_or_id = request.POST.get('name_or_id').strip()
-        dmonth = request.POST.get('month').strip() 
-        dyear = request.POST.get('year').strip()
-        dpay_cycle = request.POST.get('cycle').strip()
-
+        try:
+            dname_or_id = request.POST.get('name_or_id').strip()
+            dmonth = request.POST.get('month').strip() 
+            dyear = request.POST.get('year').strip()
+            dpay_cycle = request.POST.get('cycle').strip()
+        except AttributeError:
+            messages.warning(request, 'Error: Missing Input')
+            return redirect('payslips')
         
         # If all have a value (False) [meaning one value is 0] reverse to (True) to slam it into the redirect
         if not all((dname_or_id,dmonth,dyear,dpay_cycle)):
             messages.warning(request, 'Error: Missing Input')
             return redirect('payslips')
         
-        
         # Checks if the input is a name or id
-        if Employee.objects.filter(name=dname_or_id) == 0:
-            empobj = get_object_or_404(Employee, id_name=dname_or_id)
+        if not Employee.objects.filter(name=dname_or_id):
+            empobj = get_object_or_404(Employee, id_number=dname_or_id)
         else:
             empobj = get_object_or_404(Employee, name=dname_or_id)
-
-        if payslip_objects.filter(id_number=empobj,month=dmonth,year=dyear) == 0:
+        
+        print(payslip_objects.filter(id_number=empobj,month=dmonth,year=dyear))
+        if not payslip_objects.filter(id_number=empobj,month=dmonth,year=dyear):
             #Pagibig
             if dpay_cycle == "1":
                 dtax = ((empobj.getRate()/2) + empobj.getAllowance() + empobj.getOvertime() - 100)*0.2
@@ -155,4 +165,5 @@ def view_payslip(request,pk):
     payslipobj=get_object_or_404(Payslip,pk=pk)
     empobj=payslipobj.getID()
     grosspay=empobj.getRate() + payslipobj.getOvertime()+ payslipobj.getEarnings_allowance()
-    return render(request,'MyInventoryApp/view_payslip.html', {'empobj':empobj,'payslipobj':payslipobj,'grosspay':grosspay})
+    totaldeductions = payslipobj.getPag_ibig() + payslipobj.getSSS() + payslipobj.getDeductions_health() + payslipobj.getDeductions_tax()
+    return render(request,'MyInventoryApp/view_payslip.html', {'empobj':empobj,'payslipobj':payslipobj,'grosspay':grosspay,'totaldeductions':totaldeductions})

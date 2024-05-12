@@ -11,11 +11,18 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-dark bg-custom mb-3 sticky-top" style="background-color: #592304;">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-custom mb-3 sticky-top" style="background-color: #592304;">
             <div class="container-fluid">
-                <a class="navbar-brand mb-0">Lazapee</span> </a>
-                <a class="navbar-brand mb-1" href="{% url 'employees' %}">Employees</span> </a>
-                <a class="navbar-brand mb-1" href="{% url 'payslips' %}">Payslips</span> </a>
+                <a class="navbar-brand mb-0">Lazapee </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav">
+                        <a class="nav-link" aria-current="page" href="{% url 'employees' %}">Employees</a>
+                        <a class="nav-link" aria-current="page" href="{% url 'payslips' %}">Payslips</a>
+                    </div>
+                </div>
             </div>
         </nav>
 

@@ -3,32 +3,151 @@
 
 <!-- Page Title -->
 {% block title %}
-    View Bottles
+    View Payslip
 {% endblock %}
 
 <!-- TABLE --> 
 <!--I think I should be using the getter and setter but using it directly as temp-->
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="form-header border col-md-12">
-            <h5><b>Payslip details</b></h5> 
+<div class="col-12">
+<div class="card">
+    <div class="card-header">
+        <h5 class="card-title"><b>Payslip details</b></h5>
+    </div>
+        <div class="card-body">
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td>NAME: {{empobj.name}}</td>
+                        <td class="text-end">DATE: {{payslipobj.month}}, {{payslipobj.year}}</td>
+                    </tr>
+                    <tr>
+                        <td>ID NUMBER: {{empobj.id_number}}</td>
+                        <td class="text-end">CYCLE NUMBER: {{payslipobj.pay_cycle}}</td>
+                    </tr>
+                </tbody> 
+            </table>
+
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><h5><b>Earnings:</b></h5></td>
+                                </tr>
+                                <tr> 
+                                    <td> &nbsp;&nbsp;Base Pay<br><br> &nbsp;&nbsp;Allowances <br><br> &nbsp;&nbsp;Overtime </td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-center"><h5><b>Amount</b></h5></td>
+                                </tr>
+                                <tr> 
+                                    <td> {{empobj.rate}}<br><br> {{payslipobj.earnings_allowance}}<br><br> {{payslipobj.overtime}}</td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><b>&nbsp;&nbsp;Gross Pay</b></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-center"><b>PHP {{grosspay}}</b></td>
+                                </tr>
+                            </table>
+                        </td>  
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><h5><b>Deductions:</b></h5></td>
+                                </tr>
+                                <tr> 
+                                    <td> &nbsp;&nbsp;W/HOLDING TAX<br><br> 
+                                        {% if payslipobj.pag_ibig == 0 %}
+                                        &nbsp;&nbsp;PHILHEALTH <br><br> 
+                                        &nbsp;&nbsp;SSS
+                                        {% else %}
+                                        &nbsp;&nbsp;PAG-IBIG
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-center"><h5><b>Amount</b></h5></td>
+                                </tr>
+                                <tr> 
+                                    <td> 
+                                    {{payslipobj.deductions_tax}} <br><br>
+                                    {% if payslipobj.pag_ibig == 0 %}
+                                    {{payslipobj.deductions_health}} <br><br> 
+                                    {{payslipobj.sss}}
+                                    {% else %}
+                                    {{payslipobj.pag_ibig}}
+                                    {% endif %}
+                                    </td>
+                                </tr>
+                                
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><b>&nbsp;&nbsp;Total Deductions:</b></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-center"><b>PHP {{totaldeductions}}</b></td>
+                                </tr>
+                            </table>
+                        </td>  
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td><h4><b>&nbsp;&nbsp;Net Pay:</b></h4></td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-center"><h4><b>PHP {{payslipobj.total_pay}}</b></h4></td>
+                                </tr>
+                            </table>
+                        </td>  
+                    </tr>
+                </tbody> 
+            </table>
         </div>
     </div>
 </div>
-<h>{{empobj.name}}</h>
-<h>{{empobj.id_number}}</h>
-<h>{{payslipobj.month}} , {{payslipobj.year}}</h>
-<h>{{payslipobj.pay_cycle}}</h>
-<p></p>
-<h>Base Pay: {{empobj.rate}}</h>
-<h>Allowances: {{payslipobj.earnings_allowance}}</h>
-<h>Overtime: {{payslipobj.overtime}}</h>
-<h>{{grosspay}}</h>
-<p></p>
-<h>Philhealth: {{payslipobj.deductions_health}}</h>
-<h>Pag_Ibig: {{payslipobj.pag_ibig}}</h>
-<h>SSS: {{payslipobj.sss}}</h>
-<h>Total pay: {{payslipobj.total_pay}}</h>
+</div>
 {% endblock %}
