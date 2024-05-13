@@ -112,8 +112,9 @@ def payslips(request):
             empobj = get_object_or_404(Employee, id_number=dname_or_id)
         else:
             empobj = get_object_or_404(Employee, name=dname_or_id)
-        
-        print(payslip_objects.filter(id_number=empobj,month=dmonth,year=dyear))
+    
+
+        # Checks if there is no payslip object for the employee specified
         if not payslip_objects.filter(id_number=empobj,month=dmonth,year=dyear):
             #Pagibig
             if dpay_cycle == "1":
@@ -130,7 +131,7 @@ def payslips(request):
                                        deductions_health = 0,
                                        sss=0, 
                                        overtime=empobj.getOvertime(), 
-                                       total_pay=dtotal_pay, date_range=0)
+                                       total_pay=dtotal_pay, date_range=1)
             #Philhealth and SSS
             else: 
                 ddeductions_health = (empobj.getRate()*0.04) 
@@ -148,7 +149,7 @@ def payslips(request):
                                        sss=dsss, 
                                        overtime=empobj.getOvertime(), 
                                        total_pay=dtotal_pay,
-                                       pag_ibig=0, date_range=0)
+                                       pag_ibig=0, date_range=1)
             messages.success(request, 'Payslip created successfully')
             empobj.resetOvertime()
             empobj.save()

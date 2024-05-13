@@ -29,7 +29,7 @@ class Employee(models.Model):
 class Payslip(models.Model):
     id_number = models.ForeignKey(Employee, on_delete=models.CASCADE)
     month = models.CharField(max_length=300)
-    date_range = models.CharField(max_length=300)
+    date_range = models.CharField(max_length=300,default=1)
     year = models.CharField(max_length=300)
     pay_cycle = models.IntegerField()
     rate = models.FloatField()
