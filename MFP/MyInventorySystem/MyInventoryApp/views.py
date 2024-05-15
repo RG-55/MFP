@@ -69,7 +69,7 @@ def delete_employee(request, pk):
     employee_object = get_object_or_404(Employee, pk=pk)
     employee_object.delete()
 
-    messages.success(request, 'Account deleted successfully. You have been logged out.')
+    messages.success(request, 'Employee deleted successfully.')
     return redirect('employees')
 
 def add_overtime(request, pk):
